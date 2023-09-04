@@ -5,5 +5,7 @@ _output
 *.log
 *.so
 _*.*
+*.mp4
+*/_*/*
 test*.*
 None*.png
