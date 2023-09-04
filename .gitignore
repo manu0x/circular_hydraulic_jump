@@ -7,5 +7,6 @@ _output
 _*.*
 *.mp4
 */_*/*
+*/_output*/*
 test*.*
 None*.png
