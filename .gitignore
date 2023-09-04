@@ -4,4 +4,6 @@ _output
 *.blg
 *.log
 *.so
+_*.*
+test*.*
 None*.png
