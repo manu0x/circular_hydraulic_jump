@@ -1,5 +1,7 @@
 .ipynb_checkpoints
 _output
+__pycache*
+*/__pycache*
 *.bbl
 *.blg
 *.log
