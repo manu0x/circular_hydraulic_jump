@@ -9,5 +9,6 @@ _*.*
 */_*/*
 */_output*/*
 mql/FV/chj/annulus/_output*
+mql/FV/chj/annulus/_plot*
 test*.*
 None*.png
