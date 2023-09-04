@@ -8,5 +8,6 @@ _*.*
 *.mp4
 */_*/*
 */_output*/*
+mql/FV/chj/annulus/_output*
 test*.*
 None*.png
