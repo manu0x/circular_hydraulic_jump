@@ -24,19 +24,20 @@ def plot_q(frame,
            plot_slices=True):
     import sys
     sys.path.append('.')
-
+    print(path)
     import mapc2p
     sol=Solution(frame,file_format='petsc',read_aux=False,path=path,file_prefix=file_prefix)
     
     xc_centers, yc_centers = sol.state.grid.c_centers    
-    xc = np.zeros((xc_centers.shape[0],xc_centers.shape[1]+1))
-    yc = np.zeros((yc_centers.shape[0],yc_centers.shape[1]+1))
-    xc[:,:-1] = xc_centers
-    xc[:,-1]  = xc_centers[:,0]
-    yc[:,:-1] = yc_centers
+    xc = np.zeros((xc_centers.shape[0],xc_centers.shape[1]))
+    yc = np.zeros((yc_centers.shape[0],yc_centers.shape[1]))
+    xc[:,:] = xc_centers
+    xc[:,]  = xc_centers[:,0]
+    yc[:,:] = yc_centers
     yc[:,-1]  = yc_centers[:,0]    
     
-    xp,yp = mapc2p.mapc2p(xc,yc)
+    xp,yp = mapc2p.mapc2p(xc_centers,yc_centers)
+    print(xp.shape,yp.shape,xc.shape,yc.shape)
     
     # plot mesh
     if plot_mesh:
@@ -92,6 +93,7 @@ def plot_q(frame,
         if plot_schlieren:
             import clawpack.visclaw.colormaps as cm
             scm = cm.schlieren_colormap()
+            
             pl.pcolormesh(xp,yp,abs_grad_h,cmap=scm)
         else:
             pl.pcolormesh(xp,yp,qMag,cmap='Blues')
@@ -143,7 +145,7 @@ def plot_q(frame,
 if __name__== "__main__":
     if not os.path.exists('./_plots'): os.mkdir('_plots')
     from_frame = 0
-    to_frame   = 1000
+    to_frame   = 50
     frames=range(from_frame,to_frame+1)
 
     plot_schlieren = True
@@ -154,8 +156,9 @@ if __name__== "__main__":
     print('**********************')
     print('**********************')
     print('Plotting solution ...')
+    path = './_output/'
     if True:
-        sol=Solution(0,file_format='petsc',read_aux=False,path='./_output/',file_prefix='claw')
+        sol=Solution(0,file_format='petsc',read_aux=False,path=path,file_prefix='claw')
         q1=sol.state.q[1,:,:]
         q2=sol.state.q[2,:,:]
         qMag = np.sqrt(q1**2 + q2**2)
@@ -166,6 +169,7 @@ if __name__== "__main__":
                    clim=clim,
                    xlim=xlim,
                    ylim=ylim,
+                   path=path,
                    plot_schlieren=plot_schlieren,
                    plot_pcolor=True,
                    plot_mesh=False,

@@ -17,6 +17,7 @@ Bathymetry is not enabled for the mapped grid solver at present.
 from matplotlib import animation
 import matplotlib.pyplot as plt
 from clawpack import pyclaw
+from clawpack import riemann
 import numpy as np
 from mapc2p import mapc2p, mapc2p_annulus
 
@@ -632,6 +633,16 @@ def setup(
             solver = pyclaw.ClawSolver2D(shallow_annular_hllemcc_2D)
             solver.dimensional_split = False
             solver.transverse_waves  = 1
+        elif riemann_solver.lower() == 'roe':
+            rs = riemann.shallow_roe_with_efix_2D
+            solver = pyclaw.ClawSolver2D(rs)
+            solver.limiters = pyclaw.limiters.tvd.MC
+            solver.dimensional_split=1
+        elif riemann_solver.lower() == 'hlle':
+            rs = riemann.shallow_hlle_2D
+            solver = pyclaw.ClawSolver2D(rs)
+            solver.limiters = pyclaw.limiters.tvd.MC
+            solver.dimensional_split=1
         else:
             raise Exception('Unrecognized Riemann solver')
         #
@@ -797,6 +808,7 @@ if __name__ == "__main__":
     test_case = 5
     riemann_solver = 'es'
     #riemann_solver = 'hllemcc'
+    
     use_dmin_blended = 1.0
     set_Ri = None
     
@@ -850,7 +862,7 @@ if __name__ == "__main__":
         FrOutflow=FrOutflow,
         rOutflow=rOutflow,
         diff_vis=True,
-        viscosity=0.001,
+        viscosity=0.01,
         #boundary='outflow',
         # physical parameters
         g=grav,
